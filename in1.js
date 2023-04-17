@@ -2,26 +2,56 @@
 function setup(){
     canvas = createCanvas(600 , 500);
     canvas.position(500, 200);
+    objectdec = ml5.objectDetector("cocossd", fine);
 }
 
 function preload(){
-    img = loadImage("doggy.png");
+    img = loadImage("puchi.jpg");
 }
 
-place = "";
-xcoord = 0;
-ycoord = 0;
-tex = "";
-oh = 0;
-ow = 0;
+function setup(){
+    canvas = createCanvas(600 , 500);
+    canvas.position(500, 200);
+    objectdec = ml5.objectDetector("cocossd", fine);
+}
 
-function draw(){
+objects = 0;
+object = [];
+
+santa = "";
+
+function fine() {
+
+    santa = "t";
+    console.log("EVRYTHING IS FINEEEEE");
+    objectdec.detect(img, justgettheresult);
+}
+
+function justgettheresult(error, result) {
+    if (error) {
+        console.error("you know its a error so solve it already fine this is the problem = " + error);
+    }
+
+    console.log(result);
+
+    objects = result.length;
+    object = result;
+}
+
+function draw() {
     image(img, 0, 0, 600, 500);
-    stroke("red");
-    fill("red");
-    text("DOG", 200, 100);
-    noFill();
-    rect(100, 70, 400, 400);
+
+    if (santa != "") {
+        for (i = 0; i < objects; i++) {
+
+            fill("red");
+            text(object[i].label, object[i].x + 15, object[i].y + 15);
+            noFill();
+            stroke("red");
+            rect(object[i].x, object[i].y, object[i].width, object[i].height);
+
+        }
+    }
 }
 
 function back(){

@@ -1,27 +1,51 @@
 
+function preload(){
+    img = loadImage("teddy.webp");
+}
+
 function setup(){
     canvas = createCanvas(600 , 500);
     canvas.position(500, 200);
+    objectdec = ml5.objectDetector("cocossd", fine);
 }
 
-function preload(){
-    img = loadImage("sonicplushy.webp");
+objects = 0;
+object = [];
+
+santa = "";
+
+function fine() {
+
+    santa = "t";
+    console.log("EVRYTHING IS FINEEEEE");
+    objectdec.detect(img, justgettheresult);
 }
 
-place = "";
-xcoord = 0;
-ycoord = 0;
-tex = "";
-oh = 0;
-ow = 0;
+function justgettheresult(error, result) {
+    if (error) {
+        console.error("you know its a error so solve it already fine this is the problem = " + error);
+    }
 
-function draw(){
+    console.log(result);
+
+    objects = result.length;
+    object = result;
+}
+
+function draw() {
     image(img, 0, 0, 600, 500);
-    stroke("red");
-    fill("red");
-    text("SONIC PLUSHY", 200, 50);
-    noFill();
-    rect(100, 70, 420, 420);
+
+    if (santa != "") {
+        for (i = 0; i < objects; i++) {
+
+            fill("red");
+            text(object[i].label, object[i].x + 15, object[i].y + 15);
+            noFill();
+            stroke("red");
+            rect(object[i].x, object[i].y, object[i].width, object[i].height);
+
+        }
+    }
 }
 
 function back(){
